@@ -2,6 +2,7 @@
 
 require 'rake/testtask'
 require 'rb_sys/extensiontask'
+require 'rubocop/rake_task'
 
 GEMSPEC = Gem::Specification.load('ruby_fst.gemspec')
 
@@ -24,7 +25,9 @@ Rake::TestTask.new do |t|
   t.test_files = FileList['test/**/*_test.rb']
 end
 
-task default: %i(compile test)
+RuboCop::RakeTask.new
+
+task default: %i(compile test rubocop)
 
 desc 'Bump version (rake bump[patch], rake bump[minor], rake bump[major])'
 task :bump, [:level] do |_, args|
@@ -37,14 +40,13 @@ task :bump, [:level] do |_, args|
   current = content[/VERSION = '(.+)'/, 1]
   major, minor, patch = current.split('.').map(&:to_i)
 
-  case level
-  when 'major' then major += 1; minor = 0; patch = 0
-  when 'minor' then minor += 1; patch = 0
-  when 'patch' then patch += 1
-  else abort("Unknown level: #{level}. Use major, minor, or patch.")
-  end
-
-  new_version = "#{major}.#{minor}.#{patch}"
+  new_version =
+    case level
+    when 'major' then "#{major + 1}.0.0"
+    when 'minor' then "#{major}.#{minor + 1}.0"
+    when 'patch' then "#{major}.#{minor}.#{patch + 1}"
+    else abort("Unknown level: #{level}. Use major, minor, or patch.")
+    end
 
   File.write(version_file, content.sub(/VERSION = '.+'/, "VERSION = '#{new_version}'"))
 

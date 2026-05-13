@@ -49,6 +49,7 @@ class FloorValueTest < Minitest::Test
 
     [[0].pack('C'), [42].pack('C'), [96].pack('C'), [255].pack('C')].each do |query|
       _, expected = map.get_le(query)
+
       assert_equal(expected, map.get_le_value(query))
     end
   end
@@ -56,7 +57,7 @@ class FloorValueTest < Minitest::Test
   def test_get_le_value_ip_range_lookup
     ranges = [
       [[167_772_160].pack('N'), 1],
-      [[3_232_235_520].pack('N'), 2],
+      [[3_232_235_520].pack('N'), 2]
     ]
     map = build_map(ranges)
 

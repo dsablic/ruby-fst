@@ -19,12 +19,14 @@ class SetTest < Minitest::Test
 
   def test_length_and_empty
     empty = build_set([])
+
     assert_equal(0, empty.length)
-    assert(empty.empty?)
+    assert_empty(empty)
 
     set = build_set(%w(a b))
+
     assert_equal(2, set.size)
-    refute(set.empty?)
+    refute_empty(set)
   end
 
   def test_each_enumerable
@@ -47,14 +49,15 @@ class SetTest < Minitest::Test
 
   def test_save_and_from_path
     set = build_set(%w(hello))
-    path = File.join(Dir.tmpdir, "ruby_fst_set_test_#{$$}.fst")
+    path = File.join(Dir.tmpdir, "ruby_fst_set_test_#{Process.pid}.fst")
 
     begin
       set.save(path)
       loaded = RubyFst::Set.from_path(path)
+
       assert(loaded.contains?('hello'))
     ensure
-      File.delete(path) if File.exist?(path)
+      FileUtils.rm_f(path)
     end
   end
 

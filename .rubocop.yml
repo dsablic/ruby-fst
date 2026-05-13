@@ -1,0 +1,82 @@
+plugins:
+  - rubocop-minitest
+  - rubocop-rake
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.2
+  SuggestExtensions: false
+  Exclude:
+    - 'target/**/*'
+    - 'tmp/**/*'
+    - 'pkg/**/*'
+    - 'vendor/**/*'
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: single_quotes
+
+Style/SymbolArray:
+  EnforcedStyle: percent
+  MinSize: 3
+
+Style/WordArray:
+  EnforcedStyle: percent
+  MinSize: 3
+
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    default: '()'
+    '%i': '()'
+    '%w': '()'
+
+Style/Documentation:
+  Enabled: false
+
+Style/HashEachMethods:
+  Exclude:
+    - 'test/**/*'
+
+Style/MapIntoArray:
+  Exclude:
+    - 'test/**/*'
+
+Naming/MethodParameterName:
+  AllowedNames:
+    - ge
+    - le
+    - id
+    - to
+    - by
+    - on
+    - in
+    - at
+    - of
+    - or
+    - if
+    - is
+    - as
+    - it
+
+Naming/VariableNumber:
+  CheckMethodNames: false
+
+Layout/LineLength:
+  Max: 120
+
+Metrics/BlockLength:
+  Exclude:
+    - 'test/**/*'
+    - '*.gemspec'
+    - 'Rakefile'
+
+Metrics/MethodLength:
+  Max: 25
+
+Metrics/AbcSize:
+  Max: 25
+
+Minitest/MultipleAssertions:
+  Max: 8

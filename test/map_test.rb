@@ -22,12 +22,14 @@ class MapTest < Minitest::Test
 
   def test_length_and_empty
     empty = build_map([])
+
     assert_equal(0, empty.length)
-    assert(empty.empty?)
+    assert_empty(empty)
 
     map = build_map([['a', 1], ['b', 2]])
+
     assert_equal(2, map.size)
-    refute(map.empty?)
+    refute_empty(map)
   end
 
   def test_each_enumerable
@@ -51,14 +53,15 @@ class MapTest < Minitest::Test
 
   def test_save_and_from_path
     map = build_map([['hello', 42]])
-    path = File.join(Dir.tmpdir, "ruby_fst_test_#{$$}.fst")
+    path = File.join(Dir.tmpdir, "ruby_fst_test_#{Process.pid}.fst")
 
     begin
       map.save(path)
       loaded = RubyFst::Map.from_path(path)
+
       assert_equal(42, loaded['hello'])
     ensure
-      File.delete(path) if File.exist?(path)
+      FileUtils.rm_f(path)
     end
   end
 

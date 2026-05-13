@@ -13,6 +13,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `Map#get_le_value` and `Map#get_ge_value` — return only the value (no key allocation) for floor/ceiling lookups.
 - Precompiled native gems for Linux (x86_64, aarch64), macOS (x86_64, arm64), and Windows (x64) — installs without a Rust toolchain on those platforms.
 - Tests covering binary string encoding, key lifetime after stream drop, builder GC, and 0xFF prefix-scan edge case.
+- RuboCop lint configuration with rubocop-minitest and rubocop-rake plugins; runs as part of `rake` and as a CI gate.
 
 ### Changed
 - Minimum Ruby version raised to 3.2.

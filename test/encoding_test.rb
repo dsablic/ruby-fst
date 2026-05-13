@@ -23,27 +23,32 @@ class EncodingTest < Minitest::Test
   def test_each_yields_binary_keys
     keys = []
     build_map.each { |k, _| keys << k }
+
     assert_equal(%w(alpha beta gamma), keys)
     keys.each { |k| assert_equal(Encoding::BINARY, k.encoding) }
 
     set_keys = []
     build_set.each { |k| set_keys << k }
+
     set_keys.each { |k| assert_equal(Encoding::BINARY, k.encoding) }
   end
 
   def test_get_le_returns_binary_key
     key, = build_map.get_le('beta')
+
     assert_equal(Encoding::BINARY, key.encoding)
   end
 
   def test_get_ge_returns_binary_key
     key, = build_map.get_ge('beta')
+
     assert_equal(Encoding::BINARY, key.encoding)
   end
 
   def test_levenshtein_yields_binary_keys
     keys = []
     build_map.search_levenshtein('alpha', 1) { |k, _| keys << k }
+
     keys.each { |k| assert_equal(Encoding::BINARY, k.encoding) }
   end
 
@@ -52,6 +57,7 @@ class EncodingTest < Minitest::Test
     captured = []
     map.each { |k, v| captured << [k, v] }
     GC.start
+
     assert_equal([['alpha', 0], ['beta', 1], ['gamma', 2]], captured)
   end
 

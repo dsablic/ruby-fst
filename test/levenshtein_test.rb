@@ -35,6 +35,7 @@ class LevenshteinTest < Minitest::Test
     map.search_levenshtein('bax', 2) { |k, v| results << [k, v] }
 
     keys = results.map(&:first)
+
     assert_includes(keys, 'bar')
     assert_includes(keys, 'baz')
     assert_includes(keys, 'cat')
