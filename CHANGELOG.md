@@ -6,6 +6,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-05-13
+
 ### Added
 - `Map.from_path_mmap` and `Set.from_path_mmap` for memory-mapped loading of large FSTs.
 - `Map#range(ge:, le:)` and `Set#range(ge:, le:)` streaming range iteration.

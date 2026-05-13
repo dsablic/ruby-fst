@@ -162,8 +162,10 @@ When using `from_path_mmap`, the file must remain unchanged on disk for the life
 
 ```
 bundle install
-bundle exec rake compile test
+bundle exec rake          # compile + test + rubocop
 ```
+
+Individual tasks: `rake compile`, `rake test`, `rake rubocop`. Bump the version (and CHANGELOG) with `rake bump[patch]` / `rake bump[minor]` / `rake bump[major]`. Tagging `vX.Y.Z` on GitHub triggers cross-compile and publish to RubyGems.
 
 ## License
 
