@@ -1,0 +1,9 @@
+/target/
+/tmp/
+/pkg/
+*.bundle
+*.so
+*.dylib
+*.o
+*.a
+Gemfile.lock
