@@ -11,3 +11,4 @@ crate-type = ["cdylib"]
 magnus = { version = "0.7", features = ["rb-sys"] }
 rb-sys = { version = "0.9", features = ["stable-api-compiled-fallback"] }
 fst = { version = "0.4", features = ["levenshtein"] }
+memmap2 = "0.9"

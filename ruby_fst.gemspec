@@ -11,11 +11,11 @@ Gem::Specification.new do |spec|
   spec.description = 'Finite state transducer backed ordered sets and maps via the Rust fst crate by BurntSushi'
   spec.homepage = 'https://github.com/dsablic/ruby-fst'
   spec.license = 'MIT'
-  spec.required_ruby_version = '>= 3.0'
+  spec.required_ruby_version = '>= 3.2'
 
   spec.metadata['rubygems_mfa_required'] = 'true'
   spec.metadata['source_code_uri'] = 'https://github.com/dsablic/ruby-fst'
-  spec.metadata['changelog_uri'] = 'https://github.com/dsablic/ruby-fst/releases'
+  spec.metadata['changelog_uri'] = 'https://github.com/dsablic/ruby-fst/blob/main/CHANGELOG.md'
 
   spec.files = Dir.chdir(__dir__) do
     `git ls-files -z`.split("\x0").reject { |f| f.start_with?('test/', '.git') }
