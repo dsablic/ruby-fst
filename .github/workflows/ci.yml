@@ -3,6 +3,7 @@ name: CI
 on:
   push:
     branches: [main]
+    tags: ['v*']
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -26,3 +27,26 @@ jobs:
           bundler-cache: true
 
       - run: bundle exec rake compile test
+
+  publish:
+    needs: [test]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+
+      - uses: rubygems/configure-rubygems-credentials@v1.0.0
+
+      - name: Build and push gem
+        run: |
+          gem build ruby_fst.gemspec
+          gem push ruby-fst-*.gem

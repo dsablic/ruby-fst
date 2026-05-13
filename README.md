@@ -1,5 +1,7 @@
 # ruby-fst
 
+[![CI](https://github.com/dsablic/ruby-fst/actions/workflows/ci.yml/badge.svg)](https://github.com/dsablic/ruby-fst/actions/workflows/ci.yml) [![Gem Version](https://badge.fury.io/rb/ruby-fst.svg)](https://badge.fury.io/rb/ruby-fst) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE.txt) [![Ruby](https://img.shields.io/badge/ruby-%3E%3D%203.0-red.svg)](https://www.ruby-lang.org/)
+
 Ruby bindings for the [fst](https://github.com/BurntSushi/fst) crate by Andrew Gallant. Provides finite state transducer backed ordered maps and sets with fast lookup, range queries, and fuzzy search.
 
 ## Requirements
