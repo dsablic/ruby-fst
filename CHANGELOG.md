@@ -17,6 +17,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 - Minimum Ruby version raised to 3.2.
 - `MapBuilder` and `SetBuilder` now operate on a generic `Storage` backing (heap or mmap) for both `Map` and `Set`.
+- Upgraded to magnus 0.8 (drops support for Ruby 2.7 and 3.0 in the underlying bindings; we already require 3.2+).
 
 ### Documentation
 - README clarifies key encoding, insertion order, mmap vs in-memory loading, and Levenshtein UTF-8 requirement.

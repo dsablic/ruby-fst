@@ -5,11 +5,11 @@ use fst::automaton::Levenshtein;
 use fst::raw::{CompiledAddr, Fst, Node, Output};
 use fst::{IntoStreamer, Streamer};
 use magnus::prelude::*;
-use magnus::{block, exception, function, method, Error, RArray, RString, Ruby, Value};
+use magnus::{function, method, Error, RArray, RString, Ruby, Value};
 use memmap2::Mmap;
 
 fn err(msg: impl std::fmt::Display) -> Error {
-    Error::new(exception::runtime_error(), msg.to_string())
+    Error::new(ruby().exception_runtime_error(), msg.to_string())
 }
 
 // SAFETY: every method exposed to Ruby is invoked by the VM on the GVL-owning
@@ -174,7 +174,7 @@ impl FstMap {
         let mut stream = (&self.inner).into_stream();
         while let Some((key, value)) = stream.next() {
             let rb_key = r.str_from_slice(key);
-            let _: Value = block::yield_values((rb_key, value))?;
+            let _: Value = r.yield_values((rb_key, value))?;
         }
         Ok(())
     }
@@ -193,7 +193,7 @@ impl FstMap {
         let mut stream = builder.into_stream();
         while let Some((key, value)) = stream.next() {
             let rb_key = r.str_from_slice(key);
-            let _: Value = block::yield_values((rb_key, value))?;
+            let _: Value = r.yield_values((rb_key, value))?;
         }
         Ok(())
     }
@@ -209,7 +209,7 @@ impl FstMap {
         let mut stream = builder.into_stream();
         while let Some((key, value)) = stream.next() {
             let rb_key = r.str_from_slice(key);
-            let _: Value = block::yield_values((rb_key, value))?;
+            let _: Value = r.yield_values((rb_key, value))?;
         }
         Ok(())
     }
@@ -220,7 +220,7 @@ impl FstMap {
         let mut stream = self.inner.search(lev).into_stream();
         while let Some((key, value)) = stream.next() {
             let rb_key = r.str_from_slice(key);
-            let _: Value = block::yield_values((rb_key, value))?;
+            let _: Value = r.yield_values((rb_key, value))?;
         }
         Ok(())
     }
@@ -308,7 +308,7 @@ impl FstSet {
         let mut stream = (&self.inner).into_stream();
         while let Some(key) = stream.next() {
             let rb_key = r.str_from_slice(key);
-            let _: Value = block::yield_value(rb_key)?;
+            let _: Value = r.yield_value(rb_key)?;
         }
         Ok(())
     }
@@ -327,7 +327,7 @@ impl FstSet {
         let mut stream = builder.into_stream();
         while let Some(key) = stream.next() {
             let rb_key = r.str_from_slice(key);
-            let _: Value = block::yield_value(rb_key)?;
+            let _: Value = r.yield_value(rb_key)?;
         }
         Ok(())
     }
@@ -343,7 +343,7 @@ impl FstSet {
         let mut stream = builder.into_stream();
         while let Some(key) = stream.next() {
             let rb_key = r.str_from_slice(key);
-            let _: Value = block::yield_value(rb_key)?;
+            let _: Value = r.yield_value(rb_key)?;
         }
         Ok(())
     }
@@ -354,7 +354,7 @@ impl FstSet {
         let mut stream = self.inner.search(lev).into_stream();
         while let Some(key) = stream.next() {
             let rb_key = r.str_from_slice(key);
-            let _: Value = block::yield_value(rb_key)?;
+            let _: Value = r.yield_value(rb_key)?;
         }
         Ok(())
     }
