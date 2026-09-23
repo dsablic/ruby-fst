@@ -94,7 +94,6 @@ jobs:
           - x86_64-linux-musl
           - aarch64-linux
           - aarch64-linux-musl
-          - x86_64-darwin
           - arm64-darwin
           - x64-mingw-ucrt
         include:
@@ -108,8 +107,6 @@ jobs:
           - platform: aarch64-linux-musl
             os: ubuntu-24.04-arm
             alpine: true
-          - platform: x86_64-darwin
-            os: macos-15-intel
           - platform: arm64-darwin
             os: macos-latest
           - platform: x64-mingw-ucrt
