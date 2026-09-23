@@ -6,6 +6,11 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+- Precompiled gems now build for Ruby 4.0, widening `required_ruby_version` from `< 3.5.dev`
+  to `< 4.1.dev`. On Ruby 4.x every precompiled variant was ineligible, so bundler fell back
+  to the source gem and the install needed a Rust toolchain and libclang.
+
 ## [0.2.0] — 2026-05-13
 
 ### Added
