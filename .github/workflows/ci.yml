@@ -81,8 +81,67 @@ jobs:
           path: pkg/*.gem
           if-no-files-found: error
 
+  smoke:
+    name: Smoke test (${{ matrix.platform }}, Ruby ${{ matrix.ruby }})
+    needs: [cross]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ['3.2', '3.3', '3.4', '4.0']
+        platform:
+          - x86_64-linux
+          - x86_64-linux-musl
+          - aarch64-linux
+          - aarch64-linux-musl
+          - x86_64-darwin
+          - arm64-darwin
+          - x64-mingw-ucrt
+        include:
+          - platform: x86_64-linux
+            os: ubuntu-latest
+          - platform: x86_64-linux-musl
+            os: ubuntu-latest
+            alpine: true
+          - platform: aarch64-linux
+            os: ubuntu-24.04-arm
+          - platform: aarch64-linux-musl
+            os: ubuntu-24.04-arm
+            alpine: true
+          - platform: x86_64-darwin
+            os: macos-15-intel
+          - platform: arm64-darwin
+            os: macos-latest
+          - platform: x64-mingw-ucrt
+            os: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: cross-gem-${{ matrix.platform }}
+          path: pkg
+
+      - uses: ruby/setup-ruby@v1
+        if: ${{ !matrix.alpine }}
+        with:
+          ruby-version: ${{ matrix.ruby }}
+
+      - name: Install and load the precompiled gem
+        if: ${{ !matrix.alpine }}
+        run: |
+          gem install --local --no-document pkg/*.gem
+          ruby test/smoke.rb
+        shell: bash
+
+      - name: Install and load the precompiled gem (Alpine)
+        if: ${{ matrix.alpine }}
+        run: |
+          docker run --rm -v "$PWD:/w" -w /w ruby:${{ matrix.ruby }}-alpine \
+            sh -c 'gem install --local --no-document pkg/*.gem && ruby test/smoke.rb'
+
   publish:
-    needs: [lint, test, cross]
+    needs: [lint, test, cross, smoke]
     if: |
       github.repository == 'dsablic/ruby-fst' &&
       startsWith(github.ref, 'refs/tags/v')
