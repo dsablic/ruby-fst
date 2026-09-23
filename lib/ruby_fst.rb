@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 require_relative 'ruby_fst/version'
-require_relative 'ruby_fst/ruby_fst'
+begin
+  require_relative "ruby_fst/#{RUBY_VERSION[/\A\d+\.\d+/]}/ruby_fst"
+rescue LoadError
+  require_relative 'ruby_fst/ruby_fst'
+end
 
 module RubyFst
   module RangeQuery
