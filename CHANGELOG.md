@@ -6,6 +6,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.2.2] — 2026-09-24
+
 ### Fixed
 - Precompiled gems failed to load: the binaries ship under `lib/ruby_fst/<ruby minor>/`, but
   the loader only looked for the source-build path. It now tries the versioned directory first.
