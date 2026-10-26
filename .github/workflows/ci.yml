@@ -13,11 +13,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
+      - uses: oxidize-rb/actions/setup-ruby-and-rust@v1
         with:
           ruby-version: '3.4'
+          rustup-toolchain: stable
+          rustup-components: clippy, rustfmt
           bundler-cache: true
+          cargo-cache: true
       - run: bundle exec rubocop
+      - run: cargo fmt --check
+      - run: cargo clippy --all-targets -- -D warnings
 
   test:
     runs-on: ${{ matrix.os }}
