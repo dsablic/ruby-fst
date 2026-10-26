@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'pathname'
 require 'tmpdir'
 
 class MmapTest < Minitest::Test
@@ -57,7 +58,26 @@ class MmapTest < Minitest::Test
     end
   end
 
+  def test_save_over_mmapped_file_keeps_the_mapping_readable
+    skip('Windows cannot replace a file while it is mapped') if Gem.win_platform?
+    with_saved_map do |path|
+      map = RubyFst::Map.from_path_mmap(path)
+      b = RubyFst::MapBuilder.new
+      b.insert('zeta', 9)
+      RubyFst::Map.new(b.finish).save(path)
+
+      assert_equal(1, map['beta'])
+      assert_equal(9, RubyFst::Map.from_path(path)['zeta'])
+    end
+  end
+
+  def test_mmap_accepts_pathname
+    with_saved_map do |path|
+      assert_equal(3, RubyFst::Map.from_path_mmap(Pathname(path)).length)
+    end
+  end
+
   def test_mmap_missing_file_raises
-    assert_raises(RuntimeError) { RubyFst::Map.from_path_mmap('/nonexistent/path/xxx.fst') }
+    assert_raises(IOError) { RubyFst::Map.from_path_mmap('/nonexistent/path/xxx.fst') }
   end
 end

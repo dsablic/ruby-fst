@@ -25,7 +25,7 @@ gem 'ruby-fst'
 
 All FST keys are arbitrary byte strings (`Encoding::BINARY`). When a key is returned from the gem (e.g. via `each`, `get_le`, `range`) it always carries the `Encoding::BINARY` encoding — be careful when interpolating into UTF-8 strings or `puts`-ing keys that contain non-ASCII bytes.
 
-Keys must be inserted into a builder in **strictly ascending lexicographic byte order**, with no duplicates. Out-of-order or duplicate inserts raise.
+Keys must be inserted into a builder in **strictly ascending lexicographic byte order**, with no duplicates. Out-of-order or duplicate inserts raise `RubyFst::Error`.
 
 ## Map
 
@@ -156,7 +156,15 @@ map = RubyFst::Map.from_path('/path/to/file.fst')
 map = RubyFst::Map.from_path_mmap('/path/to/file.fst')
 ```
 
-When using `from_path_mmap`, the file must remain unchanged on disk for the lifetime of the resulting `Map` or `Set` — modifying or truncating it causes undefined behavior.
+`new` and `from_path` verify the FST's checksum (FSTs written before fst 0.4 have none and load unverified) and raise `RubyFst::Error` on corrupt or invalid data. `from_path_mmap` skips the check so that opening a large file stays cheap, which means a corrupt file can return wrong results or terminate the process — only memory-map files you trust.
+
+When using `from_path_mmap`, the file must remain unchanged on disk for the lifetime of the resulting `Map` or `Set` — modifying or truncating it in place causes undefined behavior. `save` writes to a temporary file beside the target and renames it into place, so on Linux and macOS saving over a mapped file is safe: the existing mapping keeps reading the old contents. Windows refuses to replace a file while it is mapped, so there `save` raises `IOError` instead.
+
+## Errors
+
+- `IOError` — a file couldn't be read, mapped, or written.
+- `ArgumentError` — a Levenshtein query too large to build an automaton for.
+- `RubyFst::Error` (a `RuntimeError` subclass) — invalid or corrupt FST data, out-of-order builder inserts, or a builder used after `finish`.
 
 ## Development
 

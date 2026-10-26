@@ -6,6 +6,27 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+- I/O failures now raise `IOError` instead of `RuntimeError`, and Levenshtein queries too large to
+  compile raise `ArgumentError`. Other errors raise the new `RubyFst::Error`, a `RuntimeError`
+  subclass, so existing `rescue RuntimeError` for builder and format errors keeps working.
+- `new` and `from_path` verify the FST checksum. Corrupt data now raises `RubyFst::Error`; before,
+  it could return wrong results or terminate the process. FSTs written by fst < 0.4 have no
+  checksum and still load unverified. `from_path_mmap` does not verify.
+- Paths accept `Pathname`, and on Unix non-UTF-8 file names.
+- `each` and `search_levenshtein` return an `Enumerator` when called without a block.
+- In-memory FSTs report their size to Ruby's GC.
+
+- `save` writes a temporary file and renames it into place, so readers never see a partial file.
+  Symlinks are followed and permissions kept, but the replacement is a new file: hard links to the
+  old one are broken and ownership becomes the saving user's. Where a rename can't work (a
+  non-regular target such as a FIFO, or an unwritable directory) it writes in place as before. A
+  crash mid-save can leave a `<path>.tmp-<pid>` file behind.
+
+### Fixed
+- Saving over a memory-mapped file no longer crashes the process with `SIGBUS` on Linux and macOS.
+  Windows can't replace a mapped file, so `save` raises `IOError` there.
+
 ## [0.2.2] — 2026-09-24
 
 ### Fixed

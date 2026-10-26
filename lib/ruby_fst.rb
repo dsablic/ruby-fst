@@ -9,6 +9,12 @@ end
 
 module RubyFst
   module RangeQuery
+    def each(&block)
+      return enum_for(:each) { size } unless block
+
+      _each(&block)
+    end
+
     def range(ge: nil, le: nil, &block)
       return enum_for(:range, ge:, le:) unless block
 
@@ -20,14 +26,22 @@ module RubyFst
 
       _starts_with(prefix, &block)
     end
+
+    def search_levenshtein(query, distance, &block)
+      return enum_for(:search_levenshtein, query, distance) unless block
+
+      _search_levenshtein(query, distance, &block)
+    end
   end
 
   class Map
     include Enumerable
 
+    alias _each each
     alias _range range
     alias _starts_with starts_with
-    private :_range, :_starts_with
+    alias _search_levenshtein search_levenshtein
+    private :_each, :_range, :_starts_with, :_search_levenshtein
 
     prepend RangeQuery
   end
@@ -35,9 +49,11 @@ module RubyFst
   class Set
     include Enumerable
 
+    alias _each each
     alias _range range
     alias _starts_with starts_with
-    private :_range, :_starts_with
+    alias _search_levenshtein search_levenshtein
+    private :_each, :_range, :_starts_with, :_search_levenshtein
 
     prepend RangeQuery
   end
