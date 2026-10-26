@@ -6,6 +6,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.3.0] — 2026-10-26
+
 ### Changed
 - I/O failures now raise `IOError` instead of `RuntimeError`, and Levenshtein queries too large to
   compile raise `ArgumentError`. Other errors raise the new `RubyFst::Error`, a `RuntimeError`
